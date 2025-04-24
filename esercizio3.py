@@ -21,3 +21,43 @@
 # - if, for, while
 # - list, tuple, dict, set
 # - sorted(), lower(), in
+
+lista = []
+libriInseriti = set()
+
+number = int(input("quanti libri inserire? "))
+
+for _ in range(number):
+    
+    print("\n📥 Inserisci un nuovo libro:")
+    titolo = input("Inserisci un titolo: ").lower()
+    autore = input("Inserisci un autore: ").lower()
+    anno = int(input("Inserisci un anno di pubblicazione: "))
+    
+    if titolo in libriInseriti:
+        print("Libro gia presente, salta l'inserimento")
+        continue
+    
+    libro = (titolo, autore, anno)
+    
+    lista.append(libro)
+    
+    libriInseriti.add(titolo)
+    
+    print(sorted(lista))
+
+risposta = input("vuoi cercare un nuovo titolo? (s/n)").lower()
+
+if risposta == "s":
+    nome = input("Inserisci nome: ")
+    for titolo in lista:
+        if nome == titolo[0]:
+            libro = (titolo[0], titolo[1], titolo[2])
+            print(libro)
+    
+elif risposta == "n":
+    print("Ok, niente ricerca.")
+else:
+    print("Risposta non valida.")
+
+    
