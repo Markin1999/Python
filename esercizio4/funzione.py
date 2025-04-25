@@ -14,8 +14,8 @@ from modulo import analizza_lista
 
 numeri = [3, 5, 1, 4, 2]
 
-quadrati, maggiore_di_10 = analizza_lista(numeri)
+quadrati, conta = analizza_lista(numeri)
 
 print("Lista originale:", numeri)
 print("Quadrati ordinati:", quadrati)
-print("Numeri maggiori di 10:", maggiore_di_10)
+print("Numeri maggiori di 10:", conta)
