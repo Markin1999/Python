@@ -18,66 +18,53 @@
 #    - filter() per filtrare studenti
 #    - reduce() per sommare voti
 #    - continue per saltare input errati
-from studente import Studente
+
 import util
 import asyncio
-
-async def nuovoStudente ():
-    try:
-        nome = input("Inserisci il nome: ")
-        età = int(input("Inserisci l' eta"))
-    
-        voti = []
-        
-        i = int(input("Quanti voti vuoi inserire? "))
-        
-        for n in range(i):
-            while True:  # Fino a quando non scrive un voto corretto
-                try:
-                    voto = int(input(f"Inserisci il {n+1}° voto: "))
-                    voti.append(voto)
-                    break  
-                except ValueError:
-                    print("Errore: devi inserire un numero per il voto!")
-
-        studente = Studente(nome, età, voti)
-
-        await util.salva_Studente(studente)
-        await main()
-        
-    except ValueError:
-        print("Errore: Devi inserire un numero valido!")
-        
-    except Exception as e:
-        print("Errore imprevisto:", e)
-        
     
 async def main():
+    util.mainPage()
     
-    print("1. Aggiungi nuovo studente")
-    print("2. Visualizza tutti gli studenti")
-    print("3. Ottieni la media di uno studente")
+    while True: 
+        print("\nMenu Studenti")
+        print("1. Aggiungi nuovo studente")
+        print("2. Visualizza tutti gli studenti")
+        print("3. Ottieni la media di uno studente")
+        print("4. Mostra studenti ordinati per media")
+        print("5. Esci")
 
-    try:
-        scelta = input("Scegli (1/2/3): ")
-        if scelta == "1":
-            await nuovoStudente()
-        elif scelta == "2":
-            studenti = await util.carica_Studente()  # Aspetta che carichi gli studenti
-            for studente in studenti:
-                print(f"Nome: {studente.nome}, Età: {studente.età}, Voti: {studente.voti}")
-        elif scelta == "3":
-            media = await util.ottieni_media()
-            if media is not None:
-                print(f"La media dello studente è: {media:.2f}")
+        try:
+            scelta = input("Scegli (1/2/3/4/5): ")
+            if scelta == "1":
+                await util.nuovoStudente()
+            elif scelta == "2":
+                studenti = await util.carica_Studente()
+                for studente in studenti:
+                    print(f"Nome: {studente.nome}, Età: {studente.età}, Voti: {studente.voti}, Media: {studente.calcola_media()}")
+            elif scelta == "3":
+                media = await util.ottieni_media()
+                if media is not None:
+                    print(f"La media dello studente è: {media:.2f}")
+                else:
+                    print("Studente non trovato.")
+            elif scelta == "4":
+                studenti = await util.ordinaMedia()
+                for i, studente in enumerate(studenti):
+                    print(f"{i + 1} Nome: {studente.nome}, Età: {studente.età}, Voti: {studente.voti}, Media: {studente.calcola_media()}")  
+               
+              
+                    
+                    
+            elif scelta == "5":
+                print("Uscita dal programma.")
+                break 
             else:
-                print("Studente non trovato.")
+                print("Scelta non valida, riprova!")
 
-        else: 
-            raise ValueError("Scelta non valida.")
-            
+        except ValueError as ve:
+            print(f"Errore: {ve}")
+        except Exception as e:
+            print(f"Errore imprevisto: {e}")
 
-    except ValueError as ve:
-        print(f"Errore: {ve}")
-        
+
 asyncio.run(main())
